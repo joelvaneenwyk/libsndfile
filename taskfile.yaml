@@ -6,6 +6,8 @@ tasks:
   default:
     cmds:
       - cmd: |
+          uv run ./make_lite.py || true
+      - cmd: |
           cmake \
               -B CMakeBuild \
               -S . \
