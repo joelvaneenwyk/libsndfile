@@ -30,7 +30,8 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import re, sys
+import re
+import sys
 
 #----------------------------------------------------------------
 # These are all of the public functions exported from libsndfile.

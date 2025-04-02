@@ -41,8 +41,9 @@ except ImportError:
     # py3
     import subprocess as commands
 
-import os, sys
-import time, datetime
+import os
+import sys
+import datetime
 
 class Programs:
     def __init__ (self, needs_exe):
@@ -98,19 +99,19 @@ def assert_info (programs, filename, arg, value):
 
 def test_empty_fail (programs):
     print_test_name ("Empty fail test")
-    output = programs.meta_set (True, "--bext-description Alpha sine.wav")
+    programs.meta_set (True, "--bext-description Alpha sine.wav")
     print("ok")
 
 def test_copy (programs):
     print_test_name ("Copy test")
-    output = programs.meta_set (False, "--bext-description \"First Try\" sine.wav output.wav")
+    programs.meta_set (False, "--bext-description \"First Try\" sine.wav output.wav")
     assert_info (programs, "output.wav", "--bext-description", "First Try")
     print("ok")
 
 def test_update (programs, tests):
     print_test_name ("Update test")
     for arg, value in tests:
-        output = programs.meta_set (False, "%s \"%s\" output.wav" % (arg, value))
+        programs.meta_set (False, "%s \"%s\" output.wav" % (arg, value))
         assert_info (programs, "output.wav", arg, value)
     print("ok")
 
@@ -122,7 +123,7 @@ def test_post_mod (programs, tests):
 
 def test_auto_date (programs):
     print_test_name ("Auto date test")
-    output = programs.meta_set (False, "--bext-auto-time-date sine.wav date-time.wav")
+    programs.meta_set (False, "--bext-auto-time-date sine.wav date-time.wav")
     target = datetime.date.today ().__str__ ()
     assert_info (programs, "date-time.wav", "--bext-orig-date", target)
     print("ok")
@@ -132,8 +133,8 @@ def test_auto_date (programs):
 
 def test_coding_history (programs):
     print_test_name ("Coding history test")
-    output = programs.meta_set (False, "--bext-coding-hist \"alpha beta\" output.wav")
-    output = programs.meta_get (False, "--bext-coding-hist output.wav")
+    programs.meta_set (False, "--bext-coding-hist \"alpha beta\" output.wav")
+    programs.meta_get (False, "--bext-coding-hist output.wav")
     print("ok")
 
 #-------------------------------------------------------------------------------
