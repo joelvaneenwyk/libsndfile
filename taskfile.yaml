@@ -3,9 +3,20 @@
 version: '3'
 
 vars:
+  AUTOUPDATE:
+    sh: |
+      if command -v cygpath > /dev/null; then
+        cygpath --windows /usr/bin/autoupdate
+      else
+        echo "/usr/bin/autoupdate"
+      fi
   AUTORECONF:
     sh: |
-      cygpath --windows /usr/bin/autoreconf
+      if command -v cygpath > /dev/null; then
+        cygpath --windows /usr/bin/autoreconf
+      else
+        echo "/usr/bin/autoreconf"
+      fi
 
 env:
   PKG_INSTALLDIR: '{{.TASKFILE_DIR}}'
@@ -15,7 +26,14 @@ tasks:
     deps: [autoreconf]
     cmds:
       - cmd: |
-          uv run ./make_lite.py || true
+          if ! uv venv --allow-existing; then
+            rm -rf .venv
+            uv venv
+          fi
+      - cmd: |
+          uv sync --locked
+      - cmd: |
+          uv run --no-sync ./make_lite.py || true
       - cmd: |
           sh "{{joinPath .TASKFILE_DIR "configure"}}" \
             --enable-werror
@@ -24,25 +42,19 @@ tasks:
       - cmd: |
           make check
       - cmd: |
-          cmake \
+          uv run --no-sync cmake \
               -B CMakeBuild \
               -S . \
               -DCMAKE_BUILD_TYPE=Release \
               -DBUILD_SHARED_LIBS=ON \
               -DBUILD_REGTEST=OFF \
+              -DBUILD_TESTING=OFF \
               -DBUILD_EXAMPLES=OFF
       - cmd: |
-          cmake --build CMakeBuild
+          uv run --no-sync cmake --build CMakeBuild
       
   autoreconf:
     desc: Run autoreconf
-    vars:
-      AUTORECONF:
-        sh: |
-          cygpath --windows /usr/bin/autoreconf
-      AUTOUPDATE:
-        sh: |
-          cygpath --windows /usr/bin/autoupdate
     cmds:
       - cmd: |
           sh "{{toSlash .AUTOUPDATE}}" -fv

@@ -147,3 +147,5 @@ CMakeSettings.json
 
 .task/
 configure.ac~
+conftest.err
+conftest.obj
