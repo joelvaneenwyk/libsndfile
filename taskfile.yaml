@@ -2,11 +2,27 @@
 
 version: '3'
 
+vars:
+  AUTORECONF:
+    sh: |
+      cygpath --windows /usr/bin/autoreconf
+
+env:
+  PKG_INSTALLDIR: '{{.TASKFILE_DIR}}'
+
 tasks:
   default:
+    deps: [autoreconf]
     cmds:
       - cmd: |
           uv run ./make_lite.py || true
+      - cmd: |
+          sh "{{joinPath .TASKFILE_DIR "configure"}}" \
+            --enable-werror
+      - cmd: |
+          make
+      - cmd: |
+          make check
       - cmd: |
           cmake \
               -B CMakeBuild \
@@ -18,3 +34,16 @@ tasks:
       - cmd: |
           cmake --build CMakeBuild
       
+  autoreconf:
+    desc: Run autoreconf
+    vars:
+      AUTORECONF:
+        sh: |
+          cygpath --windows /usr/bin/autoreconf
+      AUTOUPDATE:
+        sh: |
+          cygpath --windows /usr/bin/autoupdate
+    cmds:
+      - cmd: |
+          sh "{{toSlash .AUTOUPDATE}}" -fv
+          sh "{{toSlash .AUTORECONF}}" -fi

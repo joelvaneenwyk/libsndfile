@@ -146,3 +146,4 @@ CMakeSettings.json
 /out/
 
 .task/
+configure.ac~
