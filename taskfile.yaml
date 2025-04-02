@@ -46,4 +46,15 @@ tasks:
     cmds:
       - cmd: |
           sh "{{toSlash .AUTOUPDATE}}" -fv
-          sh "{{toSlash .AUTORECONF}}" -fi
+          sh "{{toSlash .AUTORECONF}}" -fvi
+
+  deps:
+    cmds:
+      - cmd: |
+          pacman -Syu
+      - cmd: |
+          pacman -S --needed --noconfirm \
+            pkg-config autoconf2.72 automake1.17 libtool make \
+            ${MINGW_PACKAGE_PREFIX}-gcc \
+            ${MINGW_PACKAGE_PREFIX}-autotools \
+            ${MINGW_PACKAGE_PREFIX}-libtool
