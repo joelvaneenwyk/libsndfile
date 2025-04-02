@@ -144,3 +144,5 @@ CMakeSettings.json
 /.vscode/
 /.vs/
 /out/
+
+.task/

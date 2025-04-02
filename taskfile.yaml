@@ -1,0 +1,18 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - cmd: |
+          cmake \
+              -B CMakeBuild \
+              -S . \
+              -DCMAKE_BUILD_TYPE=Release \
+              -DBUILD_SHARED_LIBS=ON \
+              -DBUILD_REGTEST=OFF \
+              -DBUILD_EXAMPLES=OFF
+      - cmd: |
+          cmake --build CMakeBuild
+      
